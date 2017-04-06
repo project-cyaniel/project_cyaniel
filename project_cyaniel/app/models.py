@@ -163,7 +163,6 @@ class Attribute(db.Model):
 
 
 class AttributeType(db.Model):
-
     __tablename__ = 'attribute_types'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -223,4 +222,50 @@ class CharacterNotes(db.Model):
         return '<Character Note: {}>'.format(self.name)
 
 
+"""
+A requirement for an AdvancementListAttribute to be visible/valid in an advancement list.
+"""
+advancement_list_requirements = db.Table('advancement_list_requirements',
+                                         db.Column('advancement_list_attribute_id', db.Integer,
+                                                   db.ForeignKey('advancement_list_attribute.id')),
+                                         db.Column('advancement_list_attribute_id', db.Integer,
+                                                   db.ForeignKey('advancement_list_attribute.id'))
+                                         )
+
+
+class AdvancementList(db.Model):
+    """
+    A type of list for character generation / character advancement options.
+    """
+
+    __table_name__ = 'advancement_lists'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200))
+    is_chargen_only = db.Column(db.Boolean, default=False)
+    is_staff_only = db.Column(db.Boolean, default=False)
+    options = db.relationship('advancement_list_attributes', backref='advancement_list')
+
+    def __repr(self):
+        return "<Advancement List: {}>".format(self.name)
+
+
+class AdvancementListAttribute(db.Model):
+    """
+    A possible option for an advancement list, assuming all AdvancementListRequirements are met.
+    """
+
+    __table_name__ = 'advancement_list_attributes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    advancement_list_id = db.Column(db.Integer, db.ForeignKey("advancement_lists.id"))
+    advancement_list = db.relationship('advancement_lists')
+    attribute_id = db.Column(db.Integer, db.ForeignKey('attribute.id'))
+    attribute = db.relationship("attributes")
+    is_staff_only = db.Column(db.Boolean, default=False)
+    is_free_with_requirements = db.Column(db.Boolean, default=False)
+    requirements = db.relationship('attributes', secondary=advancement_list_requirements)
+
+    def __repr__(self):
+        return "<Advancement List Attribute: {}>".format(self.attribute.name)
 
