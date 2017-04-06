@@ -19,6 +19,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(60), index=True, unique=True)
     phone = db.Column(db.String(20))
     user_name = db.Column(db.String(200))
+    first_name = db.Column(db.String(60))
+    last_name = db.Column(db.String(60))
     birth_month = db.Column(db.String(20), index=True)
     birth_day = db.Column(db.Integer, index=True)
     birth_year = db.Column(db.Integer, index=True)
