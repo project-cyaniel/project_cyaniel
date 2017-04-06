@@ -27,6 +27,7 @@ class RegistrationForm(FlaskForm):
         EqualTo('confirm_password')
     ])
     confirm_password = PasswordField('Confirm Password')
+    phone = StringField('Phone Number', validators=[DataRequired()])
     birth_month = SelectField(u'Birth Month',
                               choices=[('01', 'January'), ('02', 'February'), ('03', 'March'),
                                        ('04', 'April'), ('05', 'May'), ('06', 'June'),
