@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a3472cc4-76ca-4ed5-9205-84aeac93d864" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/auth/forms.py" afterPath="$PROJECT_DIR$/app/auth/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/auth/views.py" afterPath="$PROJECT_DIR$/app/auth/views.py" />
     </list>
     <ignored path="instance/config.py" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -368,7 +366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1491509982677</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Registration form fixed.">
+      <created>1491519886640</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1491519886640</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -407,7 +412,8 @@
     <MESSAGE value="added registration form and index logo" />
     <MESSAGE value="added ignore for config" />
     <MESSAGE value="registration is working." />
-    <option name="LAST_COMMIT_MESSAGE" value="registration is working." />
+    <MESSAGE value="Registration form fixed." />
+    <option name="LAST_COMMIT_MESSAGE" value="Registration form fixed." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
