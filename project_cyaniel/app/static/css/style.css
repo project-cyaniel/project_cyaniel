@@ -105,3 +105,18 @@ p.copyright {
   height: 100%;
   margin: 0 auto -4em;
 }
+
+.image1 {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.image2 {
+  position: absolute;
+  top: 125px;
+  left: 175px;
+}
+
+.parent {
+  position: relative;
+}
