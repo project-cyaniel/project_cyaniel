@@ -4,7 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager
 
 
-# Larpworks Models
+# Project Cyaniel Models
+
 class User(UserMixin, db.Model):
     """
     Create a User table
@@ -21,12 +22,13 @@ class User(UserMixin, db.Model):
     birth_month = db.Column(db.String(20), index=True)
     birth_day = db.Column(db.Integer, index=True)
     birth_year = db.Column(db.Integer, index=True)
-    join_date = db.Column(db.Date, index=True)
+    join_date = db.Column(db.DateTime, index=True)
     experience_points = db.Column(db.Integer)  # Refers to proprietary character build points
     game_points = db.Column(db.Integer)  # Refers to proprietary redeemable game points
     emergency_contact_name = db.Column(db.String(60))
     emergency_contact_number = db.Column(db.String(20))
     password_hash = db.Column(db.String(128))
+    last_update = db.Column(db.DateTime)
     user_role_id = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
     user_character = db.relationship('UserCharacter', backref='user')
     is_admin = db.Column(db.Boolean, default=False)
@@ -55,93 +57,185 @@ class User(UserMixin, db.Model):
         return '<User: {}>'.format(self.username)
 
 
-class UserRole(UserMixin, db.Model):
+# Set up user_loader
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+class ExperienceLog(db.Model):
+    """
+    Create a log table to track player experience updates
+    """
+
+    __tablename__ = 'experience_log'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    amount = db.Column(db.Integer)
+    award_date = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return '<Experience: {}>'.format(self.name)
+
+
+class UserRole(db.Model):
     """
     Create a Player Character table - all characters assigned to user
     """
 
-    # Ensures table will be named in plural and not in singular
-    # as is the name of the model
     __tablename__ = 'user_roles'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    user_name = db.Column(db.String(200))
-    role = db.Column(db.String(200), index=True)
-    user = db.Relationship('User', backref='user_role')
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    user = db.relationship('User', backref='user_role')
+
+    def __repr__(self):
+        return '<User Role: {}>'.format(self.name)
 
 
-class UserCharacter(UserMixin, db.Model):
+class Role(db.Model):
+    """
+    Create a Role table
+    """
+
+    __tablename__ = 'roles'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60), unique=True)
+    description = db.Column(db.String(200))
+    user_roles = db.relationship('UserRole', backref='role')
+
+    def __repr__(self):
+        return '<Role: {}>'.format(self.name)
+
+
+class UserCharacter(db.Model):
     """
     Create a User Character table - all characters assigned to user
     """
 
-    # Ensures table will be named in plural and not in singular
-    # as is the name of the model
     __tablename__ = 'user_characters'
 
     id = db.Column(db.Integer, primary_key=True)
-    character_name = db.Column(db.String(60), index=True)
-    user_name = db.Column(db.String(60), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     character = db.Column('Character', backref='user_character')
+    inventory = db.Column('Inventory', backref='user_character')
+    char_notes = db.Column('CharacterNotes', backref='user_character')
+
+    def __repr__(self):
+        return '<User Character: {}>'.format(self.name)
 
 
-class Character(UserMixin, db.Model):
+class Character(db.Model):
     """
     Create a Player Character table - all characters assigned to user
     """
 
-    # Ensures table will be named in plural and not in singular
-    # as is the name of the model
     __tablename__ = 'characters'
 
     id = db.Column(db.Integer, primary_key=True)
     character_name = db.Column(db.String(60), index=True)
-    player_name = db.Column(db.String(60), index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    create_date = db.Column(db.DateTime)
+    last_update = db.Column(db.DateTime)
+    user_char_id = db.Column(db.Integer, db.ForeignKey('user_characters.id'))
+    attribute_id = db.Column(db.Integer, db.ForeignKey('character_attributes.id'))
+
+    def __repr__(self):
+        return '<Character: {}>'.format(self.name)
 
 
-class PlayerCharacter(UserMixin, db.Model):
+class CharacterAttributes(db.Model):
     """
-    Create a Player Character table - all characters assigned to user
+    Create a table to track all individual character attributes
     """
 
-    # Ensures table will be named in plural and not in singular
-    # as is the name of the model
-    __tablename__ = 'player_character'
+    __tablename__ = 'character_attributes'
 
     id = db.Column(db.Integer, primary_key=True)
-    character_name = db.Column(db.String(60), index=True)
-    player_name = db.Column(db.String(60), index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    character = db.relationship('Character', backref='character_attribute')
+    character_att_id = db.Column(db.Integer, db.ForeignKey('attributes.id'))
+
+    def __repr__(self):
+        return '<Character Attribute: {}>'.format(self.name)
 
 
-class PlayerCharacter(UserMixin, db.Model):
+class Attribute(db.Model):
     """
-    Create a Player Character table - all characters assigned to user
+    Create a master index of all character related attributes (skills, etc...)
     """
 
-    # Ensures table will be named in plural and not in singular
-    # as is the name of the model
-    __tablename__ = 'player_character'
+    __tablename__ = 'attributes'
 
     id = db.Column(db.Integer, primary_key=True)
-    character_name = db.Column(db.String(60), index=True)
-    player_name = db.Column(db.String(60), index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    attribute_name = db.Column(db.String(200), unique=True)
+    description = db.Column(db.String(200))
+    last_update = db.Column(db.DateTime)
+    att_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'))
+
+    def __repr__(self):
+        return '<Attribute: {}>'.format(self.name)
 
 
-class PlayerCharacter(UserMixin, db.Model):
-    """
-    Create a Player Character table - all characters assigned to user
-    """
+class AttributeType(db.Model):
 
-    # Ensures table will be named in plural and not in singular
-    # as is the name of the model
-    __tablename__ = 'player_character'
+    __tablename__ = 'attribute_types'
 
     id = db.Column(db.Integer, primary_key=True)
-    character_name = db.Column(db.String(60), index=True)
-    player_name = db.Column(db.String(60), index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    name = db.Column(db.String(200), unique=True)
+    last_update = db.Column(db.DateTime)
+    attribute = db.relationship('Attribute', backref='attribute_type')
+
+    def __repr__(self):
+        return '<Attribute Type: {}>'.format(self.name)
+
+
+class Inventory(db.Model):
+    """
+    Create an Inventory table where items are tied to each character
+    """
+
+    __tablename__ = 'inventory'
+
+    id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer, index=True)
+    user_char_id = db.Column(db.Integer, db.ForeignKey('user_characters.id'))
+    item = db.Column(db.Integer, db.ForeignKey('items.id'))
+
+    def __repr__(self):
+        return '<Inventory: {}>'.format(self.name)
+
+
+class Items(db.Model):
+    """
+    Create and Inventory table as an index for all in-game items and materials
+    """
+
+    __tablename__ = 'items'
+
+    id = db.Column(db.Integer, primary_key=True)
+    item_name = db.Column(db.String(200), index=True, unique=True)
+    description = db.Column(db.Text(200))
+    item_attr = db.Column(db.Text(200))
+    last_update = db.Column(db.DateTime)
+    inv_item = db.relationship('Inventory', backref='item')
+
+    def __repr__(self):
+        return '<Item: {}>'.format(self.name)
+
+
+class CharacterNotes(db.Model):
+    """
+    Create a table to house mostly clob-like fields of character notes
+    """
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    body = db.Column(db.Text(500))
+    user_char_id = db.Column(db.Integer, db.ForeignKey('user_characters.id'))
+
+    def __repr__(self):
+        return '<Character Note: {}>'.format(self.name)
+
+
+
