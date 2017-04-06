@@ -30,7 +30,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     last_update = db.Column(db.DateTime)
     user_role_id = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
-    user_character = db.relationship('UserCharacter', backref='user')
+    character = db.relationship('Character', backref='user')
     is_admin = db.Column(db.Boolean, default=False)
 
     @property
@@ -110,23 +110,6 @@ class Role(db.Model):
         return '<Role: {}>'.format(self.name)
 
 
-class UserCharacter(db.Model):
-    """
-    Create a User Character table - all characters assigned to user
-    """
-
-    __tablename__ = 'user_characters'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    character = db.Column('Character', backref='user_character')
-    inventory = db.Column('Inventory', backref='user_character')
-    char_notes = db.Column('CharacterNotes', backref='user_character')
-
-    def __repr__(self):
-        return '<User Character: {}>'.format(self.name)
-
-
 class Character(db.Model):
     """
     Create a Player Character table - all characters assigned to user
@@ -138,7 +121,7 @@ class Character(db.Model):
     character_name = db.Column(db.String(60), index=True)
     create_date = db.Column(db.DateTime)
     last_update = db.Column(db.DateTime)
-    user_char_id = db.Column(db.Integer, db.ForeignKey('user_characters.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     attribute_id = db.Column(db.Integer, db.ForeignKey('character_attributes.id'))
 
     def __repr__(self):
@@ -199,7 +182,7 @@ class Inventory(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, index=True)
-    user_char_id = db.Column(db.Integer, db.ForeignKey('user_characters.id'))
+    char_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     item = db.Column(db.Integer, db.ForeignKey('items.id'))
 
     def __repr__(self):
@@ -232,7 +215,7 @@ class CharacterNotes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     body = db.Column(db.Text(500))
-    user_char_id = db.Column(db.Integer, db.ForeignKey('user_characters.id'))
+    char_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
 
     def __repr__(self):
         return '<Character Note: {}>'.format(self.name)
