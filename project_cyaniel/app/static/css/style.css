@@ -30,12 +30,12 @@ p.copyright {
     margin: auto;
     color: #282727;
     background-color: #d5d6cf;
-    border-color: #aec251;
+    border-color: #282727;
 }
 
 .btn-default {
-    border-color: #aec251;
-    color: #aec251;
+    border-color: #282727;
+    color: #282727;
 }
 
 .btn-default:hover {
