@@ -19,6 +19,9 @@ def register():
                     user_name=form.user_name.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
+                    phone=form.phone.data,
+                    emergency_contact_name=form.emergency_contact_number.data,
+                    emergency_contact_number=form.emergency_contact_number.data,
                     password=form.password.data)
 
         # add user to the database
@@ -35,10 +38,6 @@ def register():
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    """
-    Handle requests to the /login route
-    Log a user in through the login form
-    """
     form = LoginForm()
     if form.validate_on_submit():
 
@@ -47,11 +46,14 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(
                 form.password.data):
-            # log user in
+            # log employee in
             login_user(user)
 
-            # redirect to the dashboard page after login
-            return redirect(url_for('home.dashboard'))
+            # redirect to the appropriate dashboard page
+            if user.is_admin:
+                return redirect(url_for('home.admin_dashboard'))
+            else:
+                return redirect(url_for('home.dashboard'))
 
         # when login details are incorrect
         else:
