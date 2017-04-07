@@ -147,7 +147,6 @@ class Attribute(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     attribute_name = db.Column(db.String(200), unique=True)
     description = db.Column(db.String(200))
-    last_update = db.Column(db.DateTime)
     attribute_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'))
     attribute_type = db.relationship("AttributeType")
 
@@ -160,7 +159,6 @@ class AttributeType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True)
-    last_update = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Attribute Type: {}>'.format(self.name)
