@@ -9,6 +9,28 @@ from app import db, login_manager
 
 # Project Cyaniel Models
 
+character_attributes = db.Table('character_attributes',
+                                db.Column('character_id', db.Integer, db.ForeignKey('characters.id')),
+                                db.Column('attribute_id', db.Integer, db.ForeignKey('attributes.id'))
+                                )
+
+
+user_roles = db.Table("user_roles",
+                      db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+                      db.Column('role_id', db.Integer, db.ForeignKey('roles.id'))
+                      )
+
+"""
+A requirement for an AdvancementListAttribute to be visible/valid in an advancement list.
+"""
+advancement_list_requirements = db.Table('advancement_list_requirements',
+                                         db.Column('advancement_list_attribute_id', db.Integer,
+                                                   db.ForeignKey('advancement_list_attribute.id')),
+                                         db.Column('advancement_list_attribute_id', db.Integer,
+                                                   db.ForeignKey('advancement_list_attribute.id'))
+                                         )
+
+
 class User(UserMixin, db.Model):
     """
     Create a User table
@@ -19,24 +41,23 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(60), index=True, unique=True)
+    email = db.Column(db.String(60), unique=True)
     phone = db.Column(db.String(20))
     user_name = db.Column(db.String(200))
     first_name = db.Column(db.String(60))
     last_name = db.Column(db.String(60))
-    birth_month = db.Column(db.String(20), index=True)
-    birth_day = db.Column(db.Integer, index=True)
-    birth_year = db.Column(db.Integer, index=True)
-    join_date = db.Column(db.DateTime, server_default=func.now(), index=True)
-    experience_points = db.Column(db.Integer)  # Refers to proprietary characters build points
+    birth_month = db.Column(db.String(20))
+    birth_day = db.Column(db.Integer)
+    birth_year = db.Column(db.Integer)
+    join_date = db.Column(db.DateTime, server_default=func.now(),)
+    experience_points = db.Column(db.Integer)  # Refers to proprietary character build points
     game_points = db.Column(db.Integer)  # Refers to proprietary redeemable game points
     emergency_contact_name = db.Column(db.String(60))
     emergency_contact_number = db.Column(db.String(20))
     password_hash = db.Column(db.String(128))
     last_update = db.Column(db.DateTime, onupdate=func.now())
-    user_role_id = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
-    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     is_admin = db.Column(db.Boolean, default=False)
+    roles = db.relationship("Role", secondary=user_roles)
 
     @property
     def password(self):
@@ -78,28 +99,12 @@ class ExperienceLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     amount = db.Column(db.Integer)
-    create_date = db.Column(db.DateTime, server_default=func.now())
+    award_date = db.Column(db.DateTime)
+	create_date = db.Column(db.DateTime, server_default=func.now())
     last_update = db.Column(db.DateTime, onupdate=func.now())
 
     def __repr__(self):
         return '<Experience: {}>'.format(self.name)
-
-
-class UserRole(db.Model):
-    """
-    Create a Roles table - all users who are mapped to a role
-    """
-
-    __tablename__ = 'user_roles'
-
-    id = db.Column(db.Integer, primary_key=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
-    user = db.relationship('User', backref='user_role')
-
-    def __repr__(self):
-        return '<User Role: {}>'.format(self.name)
 
 
 class Role(db.Model):
@@ -112,7 +117,6 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), unique=True)
     description = db.Column(db.String(200))
-    user_roles = db.relationship('UserRole', backref='role')
 
     def __repr__(self):
         return '<Role: {}>'.format(self.name)
@@ -129,26 +133,11 @@ class Character(db.Model):
     character_name = db.Column(db.String(60), index=True)
     create_date = db.Column(db.DateTime, server_default=func.now())
     last_update = db.Column(db.DateTime, onupdate=func.now())
-    user = db.relationship('User', backref='character')
-    char_attribute = db.relationship('CharacterAttributes', backref='character')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    attributes = db.relationship("Attribute", secondary=character_attributes)
 
     def __repr__(self):
         return '<Character: {}>'.format(self.name)
-
-
-class CharacterAttributes(db.Model):
-    """
-    Create a table to track all individual characters attributes
-    """
-
-    __tablename__ = 'character_attributes'
-
-    id = db.Column(db.Integer, primary_key=True)
-    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
-    attribute = db.relationship('Attribute', backref='character_attribute')
-
-    def __repr__(self):
-        return '<Character Attribute: {}>'.format(self.name)
 
 
 class Attribute(db.Model):
@@ -161,10 +150,8 @@ class Attribute(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     attribute_name = db.Column(db.String(200), unique=True)
     description = db.Column(db.String(200))
-    create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
-    char_attr = db.Column(db.Integer, db.ForeignKey('character_attributes.id'))
-    att_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'))
+    last_update = db.Column(db.DateTime)
+    attribute_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'))
 
     def __repr__(self):
         return '<Attribute: {}>'.format(self.name)
@@ -175,9 +162,7 @@ class AttributeType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True)
-    create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
-    attribute = db.relationship('Attribute', backref='attribute_type')
+    last_update = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Attribute Type: {}>'.format(self.name)
@@ -185,17 +170,18 @@ class AttributeType(db.Model):
 
 class Inventory(db.Model):
     """
-    Create an Inventory table where items are tied to each characters
+    Create an Inventory table where items are tied to each character
     """
 
     __tablename__ = 'inventory'
 
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, index=True)
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    character = db.relationship("Character")
     create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
-    char_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+    item = db.relationship("Item")
 
     def __repr__(self):
         return '<Inventory: {}>'.format(self.name)
@@ -212,9 +198,7 @@ class Items(db.Model):
     item_name = db.Column(db.String(200), index=True, unique=True)
     description = db.Column(db.Text(200))
     item_attr = db.Column(db.Text(200))
-    create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
-    inv_item = db.relationship('Inventory', backref='item')
+    last_update = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Item: {}>'.format(self.name)
@@ -222,7 +206,7 @@ class Items(db.Model):
 
 class CharacterNotes(db.Model):
     """
-    Create a table to house mostly clob-like fields of characters notes
+    Create a table to house mostly clob-like fields of character notes
     """
 
     id = db.Column(db.Integer, primary_key=True)
@@ -230,21 +214,11 @@ class CharacterNotes(db.Model):
     create_date = db.Column(db.DateTime, server_default=func.now())
     last_update = db.Column(db.DateTime, onupdate=func.now())
     body = db.Column(db.Text(500))
-    char_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    character = db.relationship("Character")
 
     def __repr__(self):
         return '<Character Note: {}>'.format(self.name)
-
-
-"""
-A requirement for an AdvancementListAttribute to be visible/valid in an advancement list.
-"""
-advancement_list_requirements = db.Table('advancement_list_requirements',
-                                         db.Column('advancement_list_attribute_id', db.Integer,
-                                                   db.ForeignKey('advancement_list_attribute.id')),
-                                         db.Column('advancement_list_attribute_id', db.Integer,
-                                                   db.ForeignKey('advancement_list_attribute.id'))
-                                         )
 
 
 class AdvancementList(db.Model):
@@ -258,7 +232,7 @@ class AdvancementList(db.Model):
     name = db.Column(db.String(200))
     is_chargen_only = db.Column(db.Boolean, default=False)
     is_staff_only = db.Column(db.Boolean, default=False)
-    options = db.relationship('advancement_list_attributes', backref='advancement_list')
+    options = db.relationship('AdvancementListAttribute', backref='advancement_list')
 
     def __repr(self):
         return "<Advancement List: {}>".format(self.name)
@@ -275,10 +249,10 @@ class AdvancementListAttribute(db.Model):
     advancement_list_id = db.Column(db.Integer, db.ForeignKey("advancement_lists.id"))
     advancement_list = db.relationship('advancement_lists')
     attribute_id = db.Column(db.Integer, db.ForeignKey('attribute.id'))
-    attribute = db.relationship("attributes")
+    attribute = db.relationship("Attribute")
     is_staff_only = db.Column(db.Boolean, default=False)
     is_free_with_requirements = db.Column(db.Boolean, default=False)
-    requirements = db.relationship('attributes', secondary=advancement_list_requirements)
+    requirements = db.relationship('Attribute', secondary=advancement_list_requirements)
 
     def __repr__(self):
         return "<Advancement List Attribute: {}>".format(self.attribute.name)
