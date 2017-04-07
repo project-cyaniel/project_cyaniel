@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from . import admin
 from .forms import CharacterForm, RoleForm, UserAssignForm
 from .. import db
-from ..models import Character, Role, User, UserRole
+from ..models import Character, Role, User
 
 
 def check_admin():
