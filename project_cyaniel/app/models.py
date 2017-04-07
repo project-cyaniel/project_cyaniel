@@ -57,6 +57,7 @@ class User(UserMixin, db.Model):
     last_update = db.Column(db.DateTime)
     is_admin = db.Column(db.Boolean, default=False)
     roles = db.relationship("Role", secondary=user_roles)
+    characters = db.relationship("Character", back_populates="user")
 
     @property
     def password(self):
@@ -97,7 +98,7 @@ class ExperienceLog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
-    character = db.relationship("Character")
+    character = db.relationship("Character", back_populates='xp_logs')
     amount = db.Column(db.Integer)
     award_date = db.Column(db.DateTime)
 
@@ -132,7 +133,11 @@ class Character(db.Model):
     create_date = db.Column(db.DateTime)
     last_update = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", back_populates="characters")
     attributes = db.relationship("Attribute", secondary=character_attributes)
+    xp_logs = db.relationship("ExperienceLog", back_populates='character')
+    items = db.relationship("Inventory", back_populates='character')
+    notes = db.relationship("CharacterNotes", back_populates='character')
 
     def __repr__(self):
         return '<Character: {}>'.format(self.name)
@@ -175,7 +180,7 @@ class Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, index=True)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
-    character = db.relationship("Character")
+    character = db.relationship("Character", back_populates='items')
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     item = db.relationship("Item")
 
@@ -211,7 +216,7 @@ class CharacterNotes(db.Model):
     title = db.Column(db.String(200))
     body = db.Column(db.Text(500))
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
-    character = db.relationship("Character")
+    character = db.relationship("Character", back_populates='notes')
 
     def __repr__(self):
         return '<Character Note: {}>'.format(self.name)
