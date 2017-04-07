@@ -19,7 +19,7 @@ def register():
                     user_name=form.user_name.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
-                    password=form.password.data,
+                    password_hash=form.password.data,
                     birth_month=form.birth_month.data,
                     birth_day=form.birth_day.data,
                     birth_year=form.birth_year.data,
