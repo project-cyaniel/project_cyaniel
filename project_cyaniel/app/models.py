@@ -1,9 +1,5 @@
-# Imports
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.sql import func
-
-# Local Imports
 from app import db, login_manager
 
 
@@ -25,9 +21,9 @@ A requirement for an AdvancementListAttribute to be visible/valid in an advancem
 """
 advancement_list_requirements = db.Table('advancement_list_requirements',
                                          db.Column('advancement_list_attribute_id', db.Integer,
-                                                   db.ForeignKey('advancement_list_attribute.id')),
-                                         db.Column('advancement_list_attribute_id', db.Integer,
-                                                   db.ForeignKey('advancement_list_attribute.id'))
+                                                   db.ForeignKey('advancement_list_attributes.id')),
+                                         db.Column('attribute_requirement_id', db.Integer,
+                                                   db.ForeignKey('attributes.id'))
                                          )
 
 
@@ -41,21 +37,21 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(60), unique=True)
+    email = db.Column(db.String(60), index=True, unique=True)
     phone = db.Column(db.String(20))
     user_name = db.Column(db.String(200))
     first_name = db.Column(db.String(60))
     last_name = db.Column(db.String(60))
-    birth_month = db.Column(db.String(20))
-    birth_day = db.Column(db.Integer)
-    birth_year = db.Column(db.Integer)
-    join_date = db.Column(db.DateTime, server_default=func.now(),)
+    birth_month = db.Column(db.String(20), index=True)
+    birth_day = db.Column(db.Integer, index=True)
+    birth_year = db.Column(db.Integer, index=True)
+    join_date = db.Column(db.DateTime, index=True)
     experience_points = db.Column(db.Integer)  # Refers to proprietary character build points
     game_points = db.Column(db.Integer)  # Refers to proprietary redeemable game points
     emergency_contact_name = db.Column(db.String(60))
     emergency_contact_number = db.Column(db.String(20))
     password_hash = db.Column(db.String(128))
-    last_update = db.Column(db.DateTime, onupdate=func.now())
+    last_update = db.Column(db.DateTime)
     is_admin = db.Column(db.Boolean, default=False)
     roles = db.relationship("Role", secondary=user_roles)
 
@@ -94,14 +90,12 @@ class ExperienceLog(db.Model):
     Create a log table to track player experience updates
     """
 
-    __tablename__ = 'experience_log'
+    __tablename__ = 'experience_logs'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     amount = db.Column(db.Integer)
     award_date = db.Column(db.DateTime)
-	create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
 
     def __repr__(self):
         return '<Experience: {}>'.format(self.name)
@@ -131,8 +125,8 @@ class Character(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     character_name = db.Column(db.String(60), index=True)
-    create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
+    create_date = db.Column(db.DateTime)
+    last_update = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     attributes = db.relationship("Attribute", secondary=character_attributes)
 
@@ -142,7 +136,7 @@ class Character(db.Model):
 
 class Attribute(db.Model):
     """
-    Create a master index of all characters related attributes (skills, etc...)
+    Create a master index of all character related attributes (skills, etc...)
     """
 
     __tablename__ = 'attributes'
@@ -179,7 +173,6 @@ class Inventory(db.Model):
     quantity = db.Column(db.Integer, index=True)
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     character = db.relationship("Character")
-    create_date = db.Column(db.DateTime, server_default=func.now())
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     item = db.relationship("Item")
 
@@ -209,10 +202,10 @@ class CharacterNotes(db.Model):
     Create a table to house mostly clob-like fields of character notes
     """
 
+    __tablename__ = 'character_notes'
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
-    create_date = db.Column(db.DateTime, server_default=func.now())
-    last_update = db.Column(db.DateTime, onupdate=func.now())
     body = db.Column(db.Text(500))
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     character = db.relationship("Character")
@@ -226,13 +219,13 @@ class AdvancementList(db.Model):
     A type of list for character generation / character advancement options.
     """
 
-    __table_name__ = 'advancement_lists'
+    __tablename__ = 'advancement_lists'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
     is_chargen_only = db.Column(db.Boolean, default=False)
     is_staff_only = db.Column(db.Boolean, default=False)
-    options = db.relationship('AdvancementListAttribute', backref='advancement_list')
+    options = db.relationship('AdvancementListAttribute')
 
     def __repr(self):
         return "<Advancement List: {}>".format(self.name)
@@ -243,12 +236,12 @@ class AdvancementListAttribute(db.Model):
     A possible option for an advancement list, assuming all AdvancementListRequirements are met.
     """
 
-    __table_name__ = 'advancement_list_attributes'
+    __tablename__ = 'advancement_list_attributes'
 
     id = db.Column(db.Integer, primary_key=True)
     advancement_list_id = db.Column(db.Integer, db.ForeignKey("advancement_lists.id"))
-    advancement_list = db.relationship('advancement_lists')
-    attribute_id = db.Column(db.Integer, db.ForeignKey('attribute.id'))
+    advancement_list = db.relationship('AdvancementList')
+    attribute_id = db.Column(db.Integer, db.ForeignKey('attributes.id'))
     attribute = db.relationship("Attribute")
     is_staff_only = db.Column(db.Boolean, default=False)
     is_free_with_requirements = db.Column(db.Boolean, default=False)
