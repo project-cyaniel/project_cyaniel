@@ -6,6 +6,7 @@ from .forms import CharacterForm
 from .. import db
 from ..models import Character
 
+
 def check_admin():
     """
     Prevent non-admins from accessing the page
@@ -34,7 +35,7 @@ def list_characters():
 @login_required
 def add_character():
     """
-    Add a character to the database
+    Add a characters to the database
     """
     check_admin()
 
@@ -43,19 +44,20 @@ def add_character():
     form = CharacterForm()
     if form.validate_on_submit():
         character = Character(character_name=form.character_name.data)
+
         try:
-            # add character to the database
+            # add characters to the database
             db.session.add(character)
             db.session.commit()
-            flash('You have successfully added a new character.')
+            flash('You have successfully added a new characters.')
         except:
-            # in case character name already exists
-            flash('Error: character name already exists.')
+            # in case characters name already exists
+            flash('Error: characters name already exists.')
 
         # redirect to characters page
         return redirect(url_for('admin.list_characters'))
 
-    # load character template
+    # load characters template
     return render_template('admin/characters/character.html', action="Add",
                            add_character=add_character, form=form,
                            title="Add Character")
@@ -65,7 +67,7 @@ def add_character():
 @login_required
 def edit_character(id):
     """
-    Edit a character
+    Edit a characters
     """
     check_admin()
 
@@ -75,8 +77,10 @@ def edit_character(id):
     form = CharacterForm(obj=character)
     if form.validate_on_submit():
         character.character_name = form.character_name.data
+        character.last_update = form.last_update.data
+        character.id = form.id.data
         db.session.commit()
-        flash('You have successfully edited the character.')
+        flash('You have successfully edited the characters.')
 
         # redirect to the characters page
         return redirect(url_for('admin.list_characters'))
@@ -91,14 +95,14 @@ def edit_character(id):
 @login_required
 def delete_character(id):
     """
-    Delete a character from the database
+    Delete a characters from the database
     """
     check_admin()
 
     character = Character.query.get_or_404(id)
     db.session.delete(character)
     db.session.commit()
-    flash('You have successfully deleted the character.')
+    flash('You have successfully deleted the characters.')
 
     # redirect to the characters page
     return redirect(url_for('admin.list_characters'))

@@ -1,6 +1,9 @@
+# Imports
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
 
+# Local Imports
 from app import db, login_manager
 
 
@@ -24,13 +27,13 @@ class User(UserMixin, db.Model):
     birth_month = db.Column(db.String(20), index=True)
     birth_day = db.Column(db.Integer, index=True)
     birth_year = db.Column(db.Integer, index=True)
-    join_date = db.Column(db.DateTime, index=True)
-    experience_points = db.Column(db.Integer)  # Refers to proprietary character build points
+    join_date = db.Column(db.DateTime, default=datetime.datetime.now, index=True)
+    experience_points = db.Column(db.Integer)  # Refers to proprietary characters build points
     game_points = db.Column(db.Integer)  # Refers to proprietary redeemable game points
     emergency_contact_name = db.Column(db.String(60))
     emergency_contact_number = db.Column(db.String(20))
     password_hash = db.Column(db.String(128))
-    last_update = db.Column(db.DateTime)
+    last_update = db.Column(db.DateTime, default=datetime.datetime.now)
     user_role_id = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
     character = db.relationship('Character', backref='user')
     is_admin = db.Column(db.Boolean, default=False)
@@ -121,10 +124,10 @@ class Character(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     character_name = db.Column(db.String(60), index=True)
-    create_date = db.Column(db.DateTime)
-    last_update = db.Column(db.DateTime)
+    create_date = db.Column(db.DateTime, default=datetime.datetime.now)
+    last_update = db.Column(db.DateTime, default=datetime.datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    attribute_id = db.Column(db.Integer, db.ForeignKey('character_attributes.id'))
+    char_attribute = db.relationship('CharacterAttributes', backref='character')
 
     def __repr__(self):
         return '<Character: {}>'.format(self.name)
@@ -132,14 +135,14 @@ class Character(db.Model):
 
 class CharacterAttributes(db.Model):
     """
-    Create a table to track all individual character attributes
+    Create a table to track all individual characters attributes
     """
 
     __tablename__ = 'character_attributes'
 
     id = db.Column(db.Integer, primary_key=True)
-    character = db.relationship('Character', backref='character_attribute')
-    character_att_id = db.Column(db.Integer, db.ForeignKey('attributes.id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    attribute = db.relationship('Attribute', backref='character_attribute')
 
     def __repr__(self):
         return '<Character Attribute: {}>'.format(self.name)
@@ -147,7 +150,7 @@ class CharacterAttributes(db.Model):
 
 class Attribute(db.Model):
     """
-    Create a master index of all character related attributes (skills, etc...)
+    Create a master index of all characters related attributes (skills, etc...)
     """
 
     __tablename__ = 'attributes'
@@ -156,6 +159,7 @@ class Attribute(db.Model):
     attribute_name = db.Column(db.String(200), unique=True)
     description = db.Column(db.String(200))
     last_update = db.Column(db.DateTime)
+    char_attr = db.Column(db.Integer, db.ForeignKey('character_attributes.id'))
     att_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'))
 
     def __repr__(self):
@@ -177,7 +181,7 @@ class AttributeType(db.Model):
 
 class Inventory(db.Model):
     """
-    Create an Inventory table where items are tied to each character
+    Create an Inventory table where items are tied to each characters
     """
 
     __tablename__ = 'inventory'
@@ -211,7 +215,7 @@ class Items(db.Model):
 
 class CharacterNotes(db.Model):
     """
-    Create a table to house mostly clob-like fields of character notes
+    Create a table to house mostly clob-like fields of characters notes
     """
 
     id = db.Column(db.Integer, primary_key=True)
