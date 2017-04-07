@@ -23,5 +23,15 @@
 <h3>Database Connection Details</h3>
 
 1. All database connection information can be found in the project google doc. Please request a share if you need it.
-   The dev database is hosted via AWS and is MySQL. If you'd like your own copy to make changes/test, please establish your own db on this instance as others will be working out
-   of this database in the working version of the app.  
+   The dev database is hosted via AWS and is MySQL. You will need to hand over your IP so I can assign it to the db security group.
+2. For testing purposes please make your own development database, as the `larpworks_db` needs to be the stable version we use for testing. Please
+   refer to the google doc and MySQL documentation on how to do this.
+3. Once you've created your own db, set up your connection string in the `/instances/config.py` file. Change directory to
+   `project_cyaniel/project_cyaniel/` and then run:</br>
+   `flask db migrate`</br>
+   `flask db upgrade`
+4. At the MySQL console, run:</br>
+   `use <database name>`</br>
+   `show tables;`
+5. You should see all project tables (as listed in models.py) in your new database. Please *DO NOT* make changes to the larpworks_db without
+   first going through code review. Thanks.
