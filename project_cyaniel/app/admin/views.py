@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from . import admin
 from .forms import CharacterForm, RoleForm, UserAssignForm
 from .. import db
-from ..models import Character, Role, User, UserRole
+from ..models import Character, Role, User
 
 
 def check_admin():
@@ -228,7 +228,7 @@ def assign_user(id):
 
     user = User.query.get_or_404(id)
 
-    # prevent admin from being assigned a department or role
+    # prevent admin from being assigned a character or role
     if user.is_admin:
         abort(403)
 
@@ -238,7 +238,7 @@ def assign_user(id):
         user.role = form.role.data
         db.session.add(user)
         db.session.commit()
-        flash('You have successfully assigned a department and role.')
+        flash('You have successfully assigned a character and role.')
 
         # redirect to the roles page
         return redirect(url_for('admin.list_users'))
