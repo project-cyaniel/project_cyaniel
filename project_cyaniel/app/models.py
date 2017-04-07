@@ -7,7 +7,9 @@ from app import db, login_manager
 
 character_attributes = db.Table('character_attributes',
                                 db.Column('character_id', db.Integer, db.ForeignKey('characters.id')),
-                                db.Column('attribute_id', db.Integer, db.ForeignKey('attributes.id'))
+                                db.Column('attribute_id', db.Integer, db.ForeignKey('attributes.id')),
+                                db.Column('value', db.Integer),
+                                db.Column('last_modified', db.DateTime)
                                 )
 
 
@@ -93,7 +95,8 @@ class ExperienceLog(db.Model):
     __tablename__ = 'experience_logs'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    character = db.relationship("Character")
     amount = db.Column(db.Integer)
     award_date = db.Column(db.DateTime)
 
@@ -146,6 +149,7 @@ class Attribute(db.Model):
     description = db.Column(db.String(200))
     last_update = db.Column(db.DateTime)
     attribute_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'))
+    attribute_type = db.relationship("AttributeType")
 
     def __repr__(self):
         return '<Attribute: {}>'.format(self.name)
