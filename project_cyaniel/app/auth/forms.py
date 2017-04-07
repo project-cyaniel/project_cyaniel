@@ -40,6 +40,9 @@ class RegistrationForm(FlaskForm):
     birth_year = SelectField(u'Birth Year',
                              choices=birth_years, coerce=int,
                              validators=[DataRequired()])
+    phone = StringField('Phone Number', validators=[DataRequired()])
+    emergency_contact_name = StringField('Emergency Contact', validators=[DataRequired()])
+    emergency_contact_number = StringField('Emergency Contact Number', validators=[DataRequired()])
     submit = SubmitField('Register')
 
     def validate_email(self, field):
