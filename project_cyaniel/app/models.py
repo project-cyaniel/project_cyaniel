@@ -182,7 +182,6 @@ class Inventory(db.Model):
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     character = db.relationship("Character", back_populates='items')
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
-    item = db.relationship("Item")
 
     def __repr__(self):
         return '<Inventory: {}>'.format(self.name)
