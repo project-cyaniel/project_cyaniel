@@ -23,8 +23,8 @@
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
                         <li><a href="{{ url_for('home.admin_dashboard') }}">Dashboard</a></li>
-                        <li><a href="#">Users</a></li>
-                        <li><a href="#">Roles</a></li>
+                        <li><a href="{{ url_for('admin.list_users') }}">Users</a></li>
+                        <li><a href="{{ url_for('admin.list_roles') }}">Roles</a></li>
                         <li><a href="{{ url_for('admin.list_characters') }}">Characters</a></li>
                         <li><a href="#">Items</a></li>
                         <li><a href="#">Attributes and Skills</a></li>
