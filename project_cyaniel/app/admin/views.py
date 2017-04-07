@@ -228,7 +228,7 @@ def assign_user(id):
 
     user = User.query.get_or_404(id)
 
-    # prevent admin from being assigned a department or role
+    # prevent admin from being assigned a character or role
     if user.is_admin:
         abort(403)
 
@@ -238,7 +238,7 @@ def assign_user(id):
         user.role = form.role.data
         db.session.add(user)
         db.session.commit()
-        flash('You have successfully assigned a department and role.')
+        flash('You have successfully assigned a character and role.')
 
         # redirect to the roles page
         return redirect(url_for('admin.list_users'))

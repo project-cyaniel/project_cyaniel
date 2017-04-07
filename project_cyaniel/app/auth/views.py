@@ -19,18 +19,14 @@ def register():
                     user_name=form.user_name.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
-<<<<<<< HEAD
                     password=form.password.data,
                     phone=form.phone.data,
                     birth_month=form.birth_month.data,
                     birth_day=form.birth_day.data,
-                    birth_year=form.birth_year.data)
-=======
-                    phone=form.phone.data,
+                    birth_year=form.birth_year.data,
                     emergency_contact_name=form.emergency_contact_number.data,
-                    emergency_contact_number=form.emergency_contact_number.data,
-                    password=form.password.data)
->>>>>>> Authorization_Auth
+                    emergency_contact_number=form.emergency_contact_number.data)
+
 
         # add user to the database
         db.session.add(user)
