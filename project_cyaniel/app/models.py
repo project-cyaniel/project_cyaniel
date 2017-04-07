@@ -9,7 +9,8 @@ character_attributes = db.Table('character_attributes',
                                 db.Column('character_id', db.Integer, db.ForeignKey('characters.id')),
                                 db.Column('attribute_id', db.Integer, db.ForeignKey('attributes.id')),
                                 db.Column('value', db.Integer),
-                                db.Column('last_modified', db.DateTime)
+                                db.Column('last_modified', db.DateTime),
+                                db.Column('comments', db.String(1024))
                                 )
 
 
