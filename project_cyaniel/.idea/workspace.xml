@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     <list default="true" id="a3472cc4-76ca-4ed5-9205-84aeac93d864" name="Default" comment="Registration form fixed.">
 =======
     <list default="true" id="a3472cc4-76ca-4ed5-9205-84aeac93d864" name="Default" comment="Add user to character but not role">
 >>>>>>> Authorization_Auth
+=======
+    <list default="true" id="a3472cc4-76ca-4ed5-9205-84aeac93d864" name="Default" comment="">
+>>>>>>> Stashed changes
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="instance/config.py" />
@@ -33,16 +37,35 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="575">
               <caret line="45" column="33" lean-forward="true" selection-start-line="45" selection-start-column="33" selection-end-line="45" selection-end-column="33" />
 >>>>>>> Authorization_Auth
+=======
+            <state relative-caret-position="-2564">
+              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+>>>>>>> Stashed changes
               <folding>
-                <element signature="e#10#43#0" expanded="true" />
+                <marker date="1491577281000" expanded="true" signature="8188:8334" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="8256:8334" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< Updated upstream
+=======
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="405">
+              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+>>>>>>> Stashed changes
       <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/admin/forms.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -64,6 +87,7 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="75">
               <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
 =======
@@ -75,6 +99,33 @@
 >>>>>>> Authorization_Auth
               <folding>
                 <element signature="e#0#66#0" expanded="true" />
+=======
+            <state relative-caret-position="-196">
+              <caret line="27" column="79" lean-forward="false" selection-start-line="27" selection-start-column="79" selection-end-line="27" selection-end-column="79" />
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
+                <marker date="1491577281000" expanded="true" signature="302:1461" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="1523:2365" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="1580:2266" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="1590:1713" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="1871:2160" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="2420:2667" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="2425:2520" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/admin/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1232">
+              <caret line="240" column="57" lean-forward="false" selection-start-line="240" selection-start-column="57" selection-end-line="240" selection-end-column="57" />
+              <folding>
+                <element signature="e#0#66#0" expanded="true" />
+                <marker date="1491577281000" expanded="true" signature="6289:6392" ph="..." />
+                <marker date="1491577281000" expanded="true" signature="6289:6542" ph="..." />
+>>>>>>> Stashed changes
               </folding>
             </state>
           </provider>
@@ -557,8 +608,40 @@
       <option name="project" value="LOCAL" />
       <updated>1491543716698</updated>
     </task>
+<<<<<<< Updated upstream
     <option name="localTasksCounter" value="20" />
 >>>>>>> Authorization_Auth
+=======
+    <task id="LOCAL-00020" summary="Add user to character but not role">
+      <created>1491544788799</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1491544788799</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Add user to character but not role">
+      <created>1491576580243</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1491576580243</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Add user to character but not role">
+      <created>1491577046950</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1491577046950</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Add user to character but not role">
+      <created>1491577272567</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1491577272567</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
+>>>>>>> Stashed changes
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -618,6 +701,108 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+<<<<<<< Updated upstream
+=======
+    <entry file="file://$PROJECT_DIR$/app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1491577281000" expanded="true" signature="8188:8334" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="8256:8334" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+          <folding>
+            <element signature="e#10#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3510">
+          <caret line="240" column="58" lean-forward="false" selection-start-line="240" selection-start-column="58" selection-end-line="240" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#66#0" expanded="true" />
+            <marker date="1491577281000" expanded="true" signature="6289:6392" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="6289:6542" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1491577281000" expanded="true" signature="8188:8334" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="8256:8334" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+          <folding>
+            <element signature="e#10#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3600">
+          <caret line="240" column="58" lean-forward="false" selection-start-line="240" selection-start-column="58" selection-end-line="240" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#66#0" expanded="true" />
+            <marker date="1491577281000" expanded="true" signature="6289:6392" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="6289:6542" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1491577281000" expanded="true" signature="8188:8334" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="8256:8334" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+          <folding>
+            <element signature="e#10#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3600">
+          <caret line="240" column="58" lean-forward="true" selection-start-line="240" selection-start-column="58" selection-end-line="240" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#66#0" expanded="true" />
+            <marker date="1491577281000" expanded="true" signature="6289:6392" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="6289:6542" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+>>>>>>> Stashed changes
     <entry file="file://$PROJECT_DIR$/app/auth/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -625,9 +810,19 @@
           <folding>
 <<<<<<< HEAD
             <element signature="e#0#59#0" expanded="true" />
+<<<<<<< Updated upstream
 =======
             <element signature="e#0#59#0" expanded="false" />
 >>>>>>> Authorization_Auth
+=======
+            <marker date="1491577281000" expanded="true" signature="302:1461" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1523:2365" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1580:2266" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1590:1713" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1871:2160" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="2420:2667" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="2425:2520" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -651,11 +846,16 @@
         <state relative-caret-position="270">
           <caret line="21" column="41" lean-forward="true" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="41" />
           <folding>
+<<<<<<< Updated upstream
 <<<<<<< HEAD
             <element signature="e#0#33#0" expanded="true" />
 =======
             <element signature="e#10#43#0" expanded="true" />
 >>>>>>> Authorization_Auth
+=======
+            <marker date="1491577281000" expanded="true" signature="8188:8334" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="8256:8334" ph="..." />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -685,7 +885,8 @@
         <state relative-caret-position="1020">
           <caret line="71" column="62" lean-forward="true" selection-start-line="71" selection-start-column="62" selection-end-line="71" selection-end-column="62" />
           <folding>
-            <element signature="e#10#43#0" expanded="true" />
+            <marker date="1491577281000" expanded="true" signature="8188:8334" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="8256:8334" ph="..." />
           </folding>
         </state>
       </provider>
@@ -943,10 +1144,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/admin/views.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="509">
           <caret line="240" column="58" lean-forward="true" selection-start-line="240" selection-start-column="58" selection-end-line="240" selection-end-column="58" />
           <folding>
             <element signature="e#0#66#0" expanded="true" />
+=======
+        <state relative-caret-position="1232">
+          <caret line="240" column="57" lean-forward="false" selection-start-line="240" selection-start-column="57" selection-end-line="240" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#66#0" expanded="true" />
+            <marker date="1491577281000" expanded="true" signature="6289:6392" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="6289:6542" ph="..." />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
@@ -955,15 +1165,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="36" lean-forward="false" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
+<<<<<<< Updated upstream
 >>>>>>> Authorization_Auth
           <folding>
             <element signature="e#0#59#0" expanded="true" />
+=======
+          <folding>
+            <element signature="e#10#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/auth/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-196">
+          <caret line="27" column="79" lean-forward="false" selection-start-line="27" selection-start-column="79" selection-end-line="27" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+            <marker date="1491577281000" expanded="true" signature="302:1461" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1523:2365" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1580:2266" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1590:1713" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="1871:2160" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="2420:2667" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="2425:2520" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         <state relative-caret-position="75">
           <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
@@ -975,9 +1208,27 @@
           <folding>
             <element signature="e#10#43#0" expanded="true" />
 >>>>>>> Authorization_Auth
+=======
+        <state relative-caret-position="-2564">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding>
+            <marker date="1491577281000" expanded="true" signature="8188:8334" ph="..." />
+            <marker date="1491577281000" expanded="true" signature="8256:8334" ph="..." />
+>>>>>>> Stashed changes
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
+=======
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+>>>>>>> Stashed changes
   </component>
 </project>
