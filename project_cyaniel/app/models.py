@@ -8,7 +8,7 @@ from app import db, login_manager
 character_attributes = db.Table('character_attributes',
                                 db.Column('character_id', db.Integer, db.ForeignKey('characters.id')),
                                 db.Column('attribute_id', db.Integer, db.ForeignKey('attributes.id')),
-                                db.Column('value', db.Integer),
+                                db.Column('rank', db.Integer),
                                 db.Column('last_modified', db.DateTime),
                                 db.Column('comments', db.String(1024))
                                 )
@@ -26,7 +26,8 @@ advancement_list_requirements = db.Table('advancement_list_requirements',
                                          db.Column('advancement_list_attribute_id', db.Integer,
                                                    db.ForeignKey('advancement_list_attributes.id')),
                                          db.Column('attribute_requirement_id', db.Integer,
-                                                   db.ForeignKey('attributes.id'))
+                                                   db.ForeignKey('attributes.id')),
+                                         db.Column('requirement_rank', db.Integer)
                                          )
 
 
@@ -40,24 +41,25 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(60), index=True, unique=True)
+    email = db.Column(db.String(60), unique=True, nullable=False)
     phone = db.Column(db.String(20))
-    user_name = db.Column(db.String(200))
+    user_name = db.Column(db.String(200), nullable=False)
     first_name = db.Column(db.String(60))
     last_name = db.Column(db.String(60))
-    birth_month = db.Column(db.String(20), index=True)
-    birth_day = db.Column(db.Integer, index=True)
-    birth_year = db.Column(db.Integer, index=True)
-    join_date = db.Column(db.DateTime, index=True)
+    birth_month = db.Column(db.String(20))
+    birth_day = db.Column(db.Integer)
+    birth_year = db.Column(db.Integer)
+    join_date = db.Column(db.DateTime)
     experience_points = db.Column(db.Integer)  # Refers to proprietary character build points
     game_points = db.Column(db.Integer)  # Refers to proprietary redeemable game points
     emergency_contact_name = db.Column(db.String(60))
     emergency_contact_number = db.Column(db.String(20))
-    password_hash = db.Column(db.String(128))
+    password_hash = db.Column(db.String(128), nullable=False)
     last_update = db.Column(db.DateTime)
-    is_admin = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
     roles = db.relationship("Role", secondary=user_roles)
     characters = db.relationship("Character", back_populates="user")
+    awards = db.relationship("AwardLog", back_populates='user')
 
     @property
     def password(self):
@@ -89,21 +91,43 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class ExperienceLog(db.Model):
+class AwardLog(db.Model):
     """
-    Create a log table to track player experience updates
+    A log table that tracks various point awards to characters or users.
+    
+    A sample award would be experience points for a character, or glory for a player.
     """
 
-    __tablename__ = 'experience_logs'
+    __tablename__ = 'award_logs'
 
     id = db.Column(db.Integer, primary_key=True)
-    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
-    character = db.relationship("Character", back_populates='xp_logs')
-    amount = db.Column(db.Integer)
-    award_date = db.Column(db.DateTime)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship("User", back_populates='award_logs')
+    # only assigned if award is character-specific
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'), nullable=True)
+    character = db.relationship("Character", back_populates='award_logs')
+    award_type_id = db.Column(db.Integer, db.ForeignKey('award_types.id'), nullable=False)
+    award_type = db.relationship("AwardType")
+    award_date = db.Column(db.DateTime, nullable=False)
+    amount = db.Column(db.Integer, nullable=False, default=0)
+    reason = db.Column(db.String(512))
 
     def __repr__(self):
-        return '<Experience: {}>'.format(self.name)
+        return 'Award ({0}): {1}'.format(self.award_type.name, self.amount)
+
+
+class AwardType(db.Model):
+    """
+    A table specifying some kind of point-value award able to be granted to users or characters.
+    """
+
+    __tablename__ = 'award_types'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32))
+
+    def __repr__(self):
+        return '<Award Type: {}'.format(self.name)
 
 
 class Role(db.Model):
@@ -114,7 +138,7 @@ class Role(db.Model):
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True)
+    name = db.Column(db.String(60), unique=True, nullable=False)
     description = db.Column(db.String(200))
 
     def __repr__(self):
@@ -129,13 +153,13 @@ class Character(db.Model):
     __tablename__ = 'characters'
 
     id = db.Column(db.Integer, primary_key=True)
-    character_name = db.Column(db.String(60), index=True)
+    character_name = db.Column(db.String(60), nullable=False)
     create_date = db.Column(db.DateTime)
     last_update = db.Column(db.DateTime)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship("User", back_populates="characters")
     attributes = db.relationship("Attribute", secondary=character_attributes)
-    xp_logs = db.relationship("ExperienceLog", back_populates='character')
+    awards = db.relationship("AwardLog", back_populates='character')
     items = db.relationship("Inventory", back_populates='character')
     notes = db.relationship("CharacterNotes", back_populates='character')
 
@@ -151,9 +175,9 @@ class Attribute(db.Model):
     __tablename__ = 'attributes'
 
     id = db.Column(db.Integer, primary_key=True)
-    attribute_name = db.Column(db.String(200), unique=True)
+    attribute_name = db.Column(db.String(200), unique=True, nullable=False)
     description = db.Column(db.String(200))
-    attribute_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'))
+    attribute_type_id = db.Column(db.Integer, db.ForeignKey('attribute_types.id'), nullable=False)
     attribute_type = db.relationship("AttributeType")
 
     def __repr__(self):
@@ -164,7 +188,7 @@ class AttributeType(db.Model):
     __tablename__ = 'attribute_types'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), unique=True)
+    name = db.Column(db.String(200), unique=True, nullable=False)
 
     def __repr__(self):
         return '<Attribute Type: {}>'.format(self.name)
@@ -178,10 +202,10 @@ class Inventory(db.Model):
     __tablename__ = 'inventory'
 
     id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer, index=True)
-    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    quantity = db.Column(db.Integer, nullable=False)
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'), nullable=False)
     character = db.relationship("Character", back_populates='items')
-    item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+    item_id = db.Column(db.Integer, db.ForeignKey('items.id'), nullable=False)
 
     def __repr__(self):
         return '<Inventory: {}>'.format(self.name)
@@ -195,7 +219,7 @@ class Items(db.Model):
     __tablename__ = 'items'
 
     id = db.Column(db.Integer, primary_key=True)
-    item_name = db.Column(db.String(200), index=True, unique=True)
+    item_name = db.Column(db.String(200), nullable=False, unique=True)
     description = db.Column(db.Text(200))
     item_attr = db.Column(db.Text(200))
     last_update = db.Column(db.DateTime)
@@ -212,9 +236,9 @@ class CharacterNotes(db.Model):
     __tablename__ = 'character_notes'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200))
+    title = db.Column(db.String(200), nullable=False)
     body = db.Column(db.Text(500))
-    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'), nullable=False)
     character = db.relationship("Character", back_populates='notes')
 
     def __repr__(self):
@@ -229,9 +253,9 @@ class AdvancementList(db.Model):
     __tablename__ = 'advancement_lists'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200))
-    is_chargen_only = db.Column(db.Boolean, default=False)
-    is_staff_only = db.Column(db.Boolean, default=False)
+    name = db.Column(db.String(200), nullable=False)
+    is_chargen_only = db.Column(db.Boolean, default=False, nullable=False)
+    is_staff_only = db.Column(db.Boolean, default=False, nullable=False)
     options = db.relationship('AdvancementListAttribute')
 
     def __repr(self):
@@ -246,14 +270,13 @@ class AdvancementListAttribute(db.Model):
     __tablename__ = 'advancement_list_attributes'
 
     id = db.Column(db.Integer, primary_key=True)
-    advancement_list_id = db.Column(db.Integer, db.ForeignKey("advancement_lists.id"))
+    advancement_list_id = db.Column(db.Integer, db.ForeignKey("advancement_lists.id"), nullable=False)
     advancement_list = db.relationship('AdvancementList')
-    attribute_id = db.Column(db.Integer, db.ForeignKey('attributes.id'))
+    attribute_id = db.Column(db.Integer, db.ForeignKey('attributes.id'), nullable=False)
     attribute = db.relationship("Attribute")
-    is_staff_only = db.Column(db.Boolean, default=False)
-    is_free_with_requirements = db.Column(db.Boolean, default=False)
+    is_staff_only = db.Column(db.Boolean, default=False, nullable=False)
+    is_free_with_requirements = db.Column(db.Boolean, default=False, nullable=False)
     requirements = db.relationship('Attribute', secondary=advancement_list_requirements)
 
     def __repr__(self):
         return "<Advancement List Attribute: {}>".format(self.attribute.name)
-
