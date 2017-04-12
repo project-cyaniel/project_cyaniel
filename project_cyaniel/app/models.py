@@ -30,6 +30,20 @@ advancement_list_requirements = db.Table('advancement_list_requirements',
                                          db.Column('requirement_rank', db.Integer)
                                          )
 
+ticket_comments = db.Table('ticket_comments',
+                           db.Column('ticket_id', db.Integer, db.ForeignKey('bucket_tickets.id')),
+                           db.Column('author_id', db.Integer, db.ForeignKey('users.id')),
+                           db.Column('comment', db.String(1024)),
+                           db.Column('created_on', db.DateTime)
+                           )
+
+ticket_access_lists = db.Table('ticket_access_lists',
+                               db.Column('ticket_id', db.Integer, db.ForeignKey('bucket_tickets.id')),
+                               db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+                               db.Column('can_write', db.Boolean),
+                               db.Column('can_read', db.Boolean)
+                               )
+
 
 class User(UserMixin, db.Model):
     """
@@ -280,3 +294,40 @@ class AdvancementListAttribute(db.Model):
 
     def __repr__(self):
         return "<Advancement List Attribute: {}>".format(self.attribute.name)
+
+
+class Bucket(db.Model):
+    """
+    A category for tickets to live in.
+    """
+
+    __tablename__ = 'buckets'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+
+    def __repr__(self):
+        return "<Bucket: {}>".format(self.name)
+
+
+class BucketTicket(db.Model):
+    """
+    A ticket in the queue for staff administration,
+    """
+
+    __tablename__ = 'bucket_tickets'
+
+    id = db.Column(db.Integer, primary_key=True)
+    bucket_id = db.Column(db.Integer, db.ForeignKey('buckets.id'), nullable=False)
+    bucket = db.relationship('Bucket')
+    title = db.Column(db.String(128))
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    creator = db.relationship('User')
+    assignee_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    assignee = db.ForeignKey('User')
+    status = db.Column(db.Integer)
+    created_on = db.Column(db.DateTime)
+    last_modified = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return "<Ticket: {}>".format(self.title)
